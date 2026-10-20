@@ -1,0 +1,33 @@
+{
+  "name": "@dprint/shfmt",
+  "version": "0.0.0",
+  "description": "Wasm buffer for dprint-plugin-shfmt.",
+  "keywords": [
+    "sh",
+    "bash",
+    "zsh",
+    "shell",
+    "shfmt",
+    "code",
+    "formatter",
+    "dprint"
+  ],
+  "homepage": "https://github.com/dprint/dprint-plugin-shfmt#readme",
+  "bugs": {
+    "url": "https://github.com/dprint/dprint-plugin-shfmt/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dprint/dprint-plugin-shfmt.git"
+  },
+  "license": "MIT",
+  "author": "David Sherret",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "test": "node index.test.js"
+  },
+  "devDependencies": {
+    "@dprint/formatter": "~0.4.0"
+  }
+}

@@ -1,0 +1,6 @@
+/target
+deployment/npm/plugin.wasm
+deployment/npm/node_modules
+deployment/npm/LICENSE
+.claude
+.vscode

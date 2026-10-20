@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "automation": "jsr:@dprint/automation@0.12.2",
+    "binaryen": "npm:binaryen@132.0.0"
+  }
+}
