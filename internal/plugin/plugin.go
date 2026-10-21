@@ -153,6 +153,16 @@ func (p *Plugin) Format(configID uint32) uint32 {
 	return formatChanged
 }
 
+// FormatRange leaves the file as it is, since shfmt can't format part of a
+// file. It still clears what the host sent for the format, so an override
+// config doesn't carry over to the next one.
+func (p *Plugin) FormatRange(configID, rangeStart, rangeEnd uint32) uint32 {
+	_ = p.takeFromSharedBytes()
+	p.filePath = ""
+	p.overrideConfig = nil
+	return formatNoChange
+}
+
 func (p *Plugin) FormattedText() uint32 {
 	result := p.formattedText
 	p.formattedText = nil
