@@ -101,6 +101,11 @@ func format(configID uint32) uint32 {
 	return instance.Format(configID)
 }
 
+//go:wasmexport format_range
+func format_range(configID, rangeStart, rangeEnd uint32) uint32 {
+	return instance.FormatRange(configID, rangeStart, rangeEnd)
+}
+
 //go:wasmexport get_formatted_text
 func get_formatted_text() uint32 {
 	return instance.FormattedText()

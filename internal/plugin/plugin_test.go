@@ -165,6 +165,34 @@ func TestFormatWithOverrideConfig(t *testing.T) {
 	}
 }
 
+func TestFormatRange(t *testing.T) {
+	var p Plugin
+	write(&p, `{"plugin":{"useTabs":false},"global":{}}`)
+	p.RegisterConfig(1)
+
+	write(&p, `{"indentWidth":3}`)
+	p.SetOverrideConfig()
+	write(&p, "/repo/script.sh")
+	p.SetFilePath()
+	write(&p, "if true; then\necho hi\nfi\n")
+	if result := p.FormatRange(1, 0, 5); result != formatNoChange {
+		t.Fatalf("FormatRange() = %d, want %d", result, formatNoChange)
+	}
+	if p.sharedBytes != nil || p.filePath != "" || p.overrideConfig != nil {
+		t.Fatal("FormatRange() did not clear the state of the format")
+	}
+
+	// the override sent with the range doesn't apply to the next format
+	write(&p, "/repo/script.sh")
+	p.SetFilePath()
+	write(&p, "if true; then\necho hi\nfi\n")
+	p.Format(1)
+	p.FormattedText()
+	if formatted := string(p.takeFromSharedBytes()); formatted != "if true; then\n  echo hi\nfi\n" {
+		t.Fatalf("override was kept: %q", formatted)
+	}
+}
+
 func TestCheckConfigUpdates(t *testing.T) {
 	var p Plugin
 	write(&p, `{"oldVersion":"0.1.0","config":{}}`)
