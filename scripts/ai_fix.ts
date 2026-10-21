@@ -102,7 +102,7 @@ function buildFixPrompt(options: AiFixOptions): string {
     : [];
 
   return [
-    `You are updating the "dprint-plugin-shfmt" Rust crate, a dprint plugin that wraps the \`mvdan.cc/sh/v3\` Go module (shfmt) to format shell scripts.`,
+    `You are updating "dprint-plugin-shfmt", a dprint plugin written in Go and compiled to Wasm with TinyGo, that wraps the \`mvdan.cc/sh/v3\` Go module (shfmt) to format shell scripts.`,
     ``,
     situation,
     ...failureOutput,
