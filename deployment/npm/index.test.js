@@ -13,6 +13,24 @@ assert.strictEqual(
   "if [[ -n $1 ]]; then\n\techo hi\nfi\n",
 );
 
+// deeply nested code doesn't overflow the stack
+const depth = 200;
+let nestedExpected = "";
+for (let i = 0; i < depth; i++) {
+  nestedExpected += `${"\t".repeat(i)}if true; then\n`;
+}
+nestedExpected += `${"\t".repeat(depth)}echo hi\n`;
+for (let i = depth - 1; i >= 0; i--) {
+  nestedExpected += `${"\t".repeat(i)}fi\n`;
+}
+assert.strictEqual(
+  formatter.formatText({
+    filePath: "file.sh",
+    fileText: `${"if true; then\n".repeat(depth)}echo hi\n${"fi\n".repeat(depth)}`,
+  }),
+  nestedExpected,
+);
+
 // uses the global config and the plugin's own config
 formatter.setConfig({ indentWidth: 2, useTabs: false }, { binaryNextLine: true });
 assert.strictEqual(
