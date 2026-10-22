@@ -8,7 +8,7 @@
 import { $ } from "automation";
 import binaryen from "binaryen";
 
-export const TINYGO_VERSION = "0.42.0";
+export const TINYGO_VERSION = "0.43.0";
 
 const rootDirPath = $.path(import.meta.dirname!).parentOrThrow();
 const outputPath = rootDirPath.join("target/plugin.wasm");
