@@ -18,6 +18,9 @@ const tinygoArgs = [
   "-target=wasm-unknown",
   // the plugin is single threaded, so it doesn't need goroutines
   "-scheduler=none",
+  // the target's default GC never frees memory, so a plugin instance would
+  // run out of it after formatting a few hundred files
+  "-gc=precise",
   "-no-debug",
   "-opt=2",
 ];
