@@ -21,6 +21,9 @@ const tinygoArgs = [
   // the target's default GC never frees memory, so a plugin instance would
   // run out of it after formatting a few hundred files
   "-gc=precise",
+  // an 8 MiB stack instead of the linker's default of 64 KiB, since shfmt
+  // parses and prints recursively and 100 nested `if`s overflowed that
+  "-ldflags=-extldflags '-z stack-size=8388608'",
   "-no-debug",
   "-opt=2",
 ];
