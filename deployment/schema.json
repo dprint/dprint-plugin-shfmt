@@ -2,6 +2,34 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://plugins.dprint.dev/dprint/dprint-plugin-shfmt/0.0.0/schema.json",
   "type": "object",
+  "x-playground": {
+    "input": [
+      "#!/usr/bin/env bash",
+      "set -euo pipefail",
+      "",
+      "BACKUP_DIR=${BACKUP_DIR:-/var/backups/app}",
+      "",
+      "log(){ echo \"[$(date +%H:%M:%S)] $*\" >&2 ; }",
+      "",
+      "usage()",
+      "{",
+      "    echo \"usage: $0 <backup|restore> [name]\"; exit 1",
+      "}",
+      "",
+      "[ $# -ge 1 ]||usage",
+      "",
+      "case \"$1\" in",
+      "  backup) name=\"app-$(date +%F).tar.gz\"",
+      "    mkdir -p \"$BACKUP_DIR\"",
+      "    tar -czf \"$BACKUP_DIR/$name\" /srv/app 2> /dev/null && log \"created $name\" ;;",
+      "  restore)",
+      "      for f in \"$BACKUP_DIR\"/*.tar.gz;do",
+      "        if [[ \"$f\" == *\"${2:-}\"* ]];then tar -xzf \"$f\" -C / ; log \"restored $f\"; fi",
+      "      done;;",
+      "  *) usage;;",
+      "esac"
+    ]
+  },
   "properties": {
     "dialect": {
       "description": "The shell dialect to parse the files as (shfmt's `-ln`). With `auto`, it's picked from the file name, then the shebang, falling back to Bash.",
@@ -37,42 +65,95 @@
     "indentWidth": {
       "description": "The number of spaces for an indent when not using tabs (shfmt's `-i`).",
       "default": 2,
-      "type": "number"
+      "type": "integer",
+      "minimum": 0
     },
     "useTabs": {
       "description": "Whether to indent with tabs, which is shfmt's default (`-i 0`).",
       "default": true,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "if [ -f config.sh ]; then",
+          "  . ./config.sh",
+          "fi"
+        ]
+      }
     },
     "binaryNextLine": {
       "description": "Whether binary operators like `&&` and `|` may start a line (shfmt's `-bn`).",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "[ -f config.sh ] &&",
+          "  [ -r config.sh ] ||",
+          "  exit 1"
+        ]
+      }
     },
     "switchCaseIndent": {
       "description": "Whether to indent the patterns of a `case` statement (shfmt's `-ci`).",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "case \"$1\" in",
+          "start) run ;;",
+          "stop) halt ;;",
+          "esac"
+        ]
+      }
     },
     "spaceRedirects": {
       "description": "Whether redirect operators are followed by a space (ex. `> file` instead of `>file`) (shfmt's `-sr`).",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "echo \"done\" >> build.log 2>&1",
+          "sort < names.txt > sorted.txt"
+        ]
+      }
     },
     "functionNextLine": {
       "description": "Whether to put the opening brace of a function on the next line (shfmt's `-fn`).",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "greet() {",
+          "  echo \"hello $1\"",
+          "}"
+        ]
+      }
     },
     "simplify": {
       "description": "Whether to simplify the code (ex. `[[ \"$a\" == b ]]` to `[[ $a == b ]]`) (shfmt's `-s`).",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "if [[ \"$name\" == admin ]]; then",
+          "  count=$(( $count + 1 ))",
+          "fi"
+        ]
+      }
     },
     "minify": {
       "description": "Whether to minify the code to reduce its size, which removes comments and implies `simplify` (shfmt's `-mn`).",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "# greets the user",
+          "greet() {",
+          "  echo \"hello $1\"",
+          "}",
+          "",
+          "greet world"
+        ]
+      }
     }
   }
 }
