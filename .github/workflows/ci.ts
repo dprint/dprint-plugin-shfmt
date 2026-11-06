@@ -29,6 +29,15 @@ const buildJob = job("build", {
     { name: "Test", run: "go test ./..." },
     // uses the TinyGo docker image
     { name: "Build", run: "deno run -A ./scripts/build.ts --docker" },
+    // adds the outputs of the code examples to the config schema, which also
+    // checks that the plugin accepts every property in it
+    {
+      name: "Generate config schema",
+      run: [
+        "deno run -A --minimum-dependency-age=0 jsr:@dprint/automation@0.14.3/tasks/publish-schema",
+        "target/plugin.wasm deployment/schema.json --extension sh",
+      ].join(" "),
+    },
     {
       name: "Lint workflow generation",
       run: [
